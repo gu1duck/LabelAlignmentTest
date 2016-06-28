@@ -56,8 +56,6 @@ class TableViewCell: UITableViewCell {
         let contentViewWidth = contentView.bounds.size.width
         let leftStringWidth = ceil(leftStringSize.width)
         let rightStringWidth = ceil(rightStringSize.width)
-        print("content view width: \(contentViewWidth)")
-        print("left string width: \(leftStringSize)")
 
         if (leftStringWidth >= (contentViewWidth * 2.0 / 3.0)) {
             additionalHorizontalConstriants.append(leftLabel.widthAnchor.constraintGreaterThanOrEqualToAnchor(contentView.widthAnchor, multiplier: 2.0 / 3.0))
