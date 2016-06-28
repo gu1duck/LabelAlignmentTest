@@ -11,7 +11,7 @@ import UIKit
 class TableViewCell: UITableViewCell {
 
     var defaultHorizontalConstraints: [NSLayoutConstraint]!
-    var additionalHorizontalConstriants: [NSLayoutConstraint]?
+    var additionalHorizontalConstriants = [NSLayoutConstraint]()
 
     static let defaultReuseIdentifier = "TableViewCellReuseIdentifier"
 
@@ -42,9 +42,7 @@ class TableViewCell: UITableViewCell {
 
     func addProportionalCroppingConstriants() {
         // Remove exsiting constraints from the view's constriants array. Inactive constraints are deallocated unless a local reference to them is maintained.
-        if let additionalHorizontalConstriants = additionalHorizontalConstriants {
-            toggleActive(false, constraints: additionalHorizontalConstriants)
-        }
+        toggleActive(false, constraints: additionalHorizontalConstriants)
 
         // Implicitly deallocates existing constraints
         additionalHorizontalConstriants = [NSLayoutConstraint]()
@@ -62,20 +60,20 @@ class TableViewCell: UITableViewCell {
         print("left string width: \(leftStringSize)")
 
         if (leftStringWidth >= (contentViewWidth * 2.0 / 3.0)) {
-            additionalHorizontalConstriants?.append(leftLabel.widthAnchor.constraintGreaterThanOrEqualToAnchor(contentView.widthAnchor, multiplier: 2.0 / 3.0))
+            additionalHorizontalConstriants.append(leftLabel.widthAnchor.constraintGreaterThanOrEqualToAnchor(contentView.widthAnchor, multiplier: 2.0 / 3.0))
             leftLabel.setContentCompressionResistancePriority(UILayoutPriorityDefaultLow, forAxis: .Horizontal)
         } else {
             leftLabel.setContentCompressionResistancePriority(UILayoutPriorityDefaultHigh, forAxis: .Horizontal)
         }
 
         if (rightStringWidth >= (contentViewWidth * 1.0 / 3.0)) {
-            additionalHorizontalConstriants?.append(rightLabel.widthAnchor.constraintGreaterThanOrEqualToAnchor(contentView.widthAnchor, multiplier: 1.0 / 3.0))
+            additionalHorizontalConstriants.append(rightLabel.widthAnchor.constraintGreaterThanOrEqualToAnchor(contentView.widthAnchor, multiplier: 1.0 / 3.0))
             rightLabel.setContentCompressionResistancePriority(UILayoutPriorityDefaultLow, forAxis: .Horizontal)
         } else {
             rightLabel.setContentCompressionResistancePriority(UILayoutPriorityDefaultHigh, forAxis: .Horizontal)
         }
 
-        toggleActive(true, constraints: additionalHorizontalConstriants!)
+        toggleActive(true, constraints: additionalHorizontalConstriants)
     }
 
     // MARK: Helper Methods
