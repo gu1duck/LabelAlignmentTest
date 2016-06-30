@@ -37,7 +37,12 @@ class TableViewCell: UITableViewCell {
         defaultHorizontalConstraints = constraints(["H:|[leftLabel][rightLabel]|": [NSLayoutFormatOptions.AlignAllTop, NSLayoutFormatOptions.AlignAllBottom]], metrics: nil)
         toggleActive(true, constraints: defaultHorizontalConstraints)
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(addProportionalCroppingConstriants), name: Label.labelTextDidChangeNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(addProportionalCroppingConstriants), name: Label.labelTextDidChangeNotification, object: leftLabel)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(addProportionalCroppingConstriants), name: Label.labelTextDidChangeNotification, object: rightLabel)
+    }
+
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 
     //MARK: Public Setup
