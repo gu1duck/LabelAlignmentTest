@@ -70,15 +70,9 @@ class TableViewCell: UITableViewCell {
         // Implicitly deallocates existing constraints
         additionalHorizontalConstriants = [NSLayoutConstraint]()
 
-        let leftString: NSString = leftLabel.text ?? ""
-        let rightString: NSString = rightLabel.text ?? ""
-
-        let leftStringSize = leftString.sizeWithAttributes([NSFontAttributeName : UIFont(name: "Courier", size: 6.248983)!])
-        let rightStringSize = rightString.sizeWithAttributes([NSFontAttributeName : UIFont(name: "Courier", size: 6.248983)!])
-
         let contentViewWidth = contentView.bounds.size.width
-        let leftStringWidth = ceil(leftStringSize.width)
-        let rightStringWidth = ceil(rightStringSize.width)
+        let leftStringWidth = leftLabel.intrinsicContentSize().width
+        let rightStringWidth = rightLabel.intrinsicContentSize().width
 
         if (leftStringWidth >= (contentViewWidth * 2.0 / 3.0)) {
             additionalHorizontalConstriants.append(leftLabel.widthAnchor.constraintGreaterThanOrEqualToAnchor(contentView.widthAnchor, multiplier: 2.0 / 3.0))
