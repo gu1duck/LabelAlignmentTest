@@ -17,6 +17,8 @@ class TableViewCell: UITableViewCell {
 
     private static let labelFont = UIFont(name: "Courier", size: 6.248983) // ~1% screen width for iPhone 6 in protrait
 
+    // MARK: Initialization
+
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         completeInitialization()
@@ -61,7 +63,7 @@ class TableViewCell: UITableViewCell {
         rightLabel.text = stringFromInt(rightLabelCharacters)
     }
 
-    // MARK: Notification Hnadlers
+    // MARK: Notification Handlers
 
     func addProportionalCroppingConstriants() {
         // Remove exsiting constraints from the view's constriants array. Inactive constraints are deallocated unless a local reference to them is maintained.
