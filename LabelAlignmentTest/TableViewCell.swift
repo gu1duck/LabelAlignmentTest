@@ -10,10 +10,10 @@ import UIKit
 
 class TableViewCell: UITableViewCell {
 
-    var defaultHorizontalConstraints: [NSLayoutConstraint]!
-    var additionalHorizontalConstriants = [NSLayoutConstraint]()
-
     static let defaultReuseIdentifier = "TableViewCellReuseIdentifier"
+
+    private var defaultHorizontalConstraints: [NSLayoutConstraint]!
+    private var additionalHorizontalConstriants = [NSLayoutConstraint]()
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
