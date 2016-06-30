@@ -15,6 +15,8 @@ class TableViewCell: UITableViewCell {
     private var defaultHorizontalConstraints: [NSLayoutConstraint]!
     private var additionalHorizontalConstriants = [NSLayoutConstraint]()
 
+    private static let labelFont = UIFont(name: "Courier", size: 6.248983) // ~1% screen width for iPhone 6 in protrait
+
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         completeInitialization()
@@ -118,7 +120,7 @@ class TableViewCell: UITableViewCell {
         let label = Label()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.backgroundColor = .yellowColor()
-        label.font = UIFont(name: "Courier", size: 6.248983)
+        label.font = TableViewCell.labelFont
 
         return label
     }()
@@ -127,7 +129,7 @@ class TableViewCell: UITableViewCell {
         let label = Label()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .Right
-        label.font = UIFont(name: "Courier", size: 6.248983)
+        label.font = TableViewCell.labelFont
 
         return label
     }()
