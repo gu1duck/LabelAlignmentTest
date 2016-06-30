@@ -63,6 +63,13 @@ class TableViewCell: UITableViewCell {
         rightLabel.text = stringFromInt(rightLabelCharacters)
     }
 
+    // MARK: Default Overrides
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        addProportionalCroppingConstriants()
+    }
+
     // MARK: Notification Handlers
 
     func addProportionalCroppingConstriants() {
