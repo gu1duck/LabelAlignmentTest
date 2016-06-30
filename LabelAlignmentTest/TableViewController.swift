@@ -29,23 +29,17 @@ class TableViewController: UITableViewController {
 
         switch indexPath.row {
         case 0:
-            cell.leftLabel.text = "01234567890123456789012345678901234567890123456789"
-            cell.rightLabel.text = "01234567890123456789012345678901234567890123456789"
+            cell.setUpWith(50, rightLabelCharacters: 50)
         case 1:
-            cell.leftLabel.text = "012345678901234567890123456789012345678901234567890123456789"
-            cell.rightLabel.text = "01234567890123456789012345678901234567890123456789"
+            cell.setUpWith(60, rightLabelCharacters: 50)
         case 2:
-            cell.leftLabel.text = "0123456789012345678901234567890123456789012345678901234567890123456789"
-            cell.rightLabel.text = "01234567890123456789012345678901234567890123456789"
+            cell.setUpWith(70, rightLabelCharacters: 50)
         case 3:
-            cell.leftLabel.text = "01234567890123456789012345678901234567890123456789012345678901234567890123456789"
-            cell.rightLabel.text = "012345678901234567890123456789"
+            cell.setUpWith(80, rightLabelCharacters: 30)
         case 4:
-            cell.leftLabel.text = "0123456789012345678901234567890123456789"
-            cell.rightLabel.text = "0123456789012345678901234567890123456789012345678901234567890123456789"
+            cell.setUpWith(40, rightLabelCharacters: 70)
         case 5:
-            cell.leftLabel.text = "01234567890123456789"
-            cell.rightLabel.text = "0123456789012345678901234567890123456789012345678901234567890123456789"
+            cell.setUpWith(20, rightLabelCharacters: 70)
         default:
             break
         }

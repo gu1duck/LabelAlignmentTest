@@ -17,15 +17,15 @@ class TableViewCell: UITableViewCell {
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setUp()
+        completeInitialization()
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        setUp()
+        completeInitialization()
     }
 
-    func setUp() {
+    private func completeInitialization() {
         addSubview(leftLabel)
         addSubview(rightLabel)
 
@@ -36,6 +36,22 @@ class TableViewCell: UITableViewCell {
         toggleActive(true, constraints: defaultHorizontalConstraints)
 
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(addProportionalCroppingConstriants), name: Label.labelTextDidChangeNotification, object: nil)
+    }
+
+    //MARK: Public Setup
+
+    func setUpWith(leftLabelCharacters:Int, rightLabelCharacters: Int)
+    {
+        let stringFromInt = { (numberOfChars:Int) -> String in
+            var string = ""
+            for index in 1...numberOfChars {
+                string = string + String(index % 10)
+            }
+            return string
+        }
+
+        leftLabel.text = stringFromInt(leftLabelCharacters)
+        rightLabel.text = stringFromInt(rightLabelCharacters)
     }
 
     // MARK: Notification Hnadlers
@@ -76,7 +92,7 @@ class TableViewCell: UITableViewCell {
 
     // MARK: Helper Methods
 
-    func constraints(formats: [String: NSLayoutFormatOptions], metrics: [String: AnyObject]?) -> [NSLayoutConstraint] {
+    private func constraints(formats: [String: NSLayoutFormatOptions], metrics: [String: AnyObject]?) -> [NSLayoutConstraint] {
 
         let views = [
             "leftLabel": leftLabel,
@@ -98,7 +114,7 @@ class TableViewCell: UITableViewCell {
 
     //MARK: Lazy Properties
 
-    lazy var leftLabel: Label = {
+    private lazy var leftLabel: Label = {
         let label = Label()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.backgroundColor = .yellowColor()
@@ -107,7 +123,7 @@ class TableViewCell: UITableViewCell {
         return label
     }()
 
-    lazy var rightLabel: Label = {
+    private lazy var rightLabel: Label = {
         let label = Label()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .Right
