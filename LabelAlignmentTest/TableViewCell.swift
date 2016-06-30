@@ -38,13 +38,6 @@ class TableViewCell: UITableViewCell {
 
         defaultHorizontalConstraints = constraints(["H:|[leftLabel][rightLabel]|": [NSLayoutFormatOptions.AlignAllTop, NSLayoutFormatOptions.AlignAllBottom]], metrics: nil)
         toggleActive(true, constraints: defaultHorizontalConstraints)
-
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(addProportionalCroppingConstriants), name: Label.labelTextDidChangeNotification, object: leftLabel)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(addProportionalCroppingConstriants), name: Label.labelTextDidChangeNotification, object: rightLabel)
-    }
-
-    deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 
     //MARK: Public Setup
@@ -61,16 +54,40 @@ class TableViewCell: UITableViewCell {
 
         leftLabel.text = stringFromInt(leftLabelCharacters)
         rightLabel.text = stringFromInt(rightLabelCharacters)
+
+        setNeedsUpdateConstraints()
     }
 
     // MARK: Default Overrides
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        addProportionalCroppingConstriants()
+    override func updateConstraints() {
+        super.updateConstraints()
+        if leftLabel.text != nil || rightLabel.text != nil {
+            addProportionalCroppingConstriants()
+        }
     }
 
-    // MARK: Notification Handlers
+    // MARK: Helper Methods
+
+    private func constraints(formats: [String: NSLayoutFormatOptions], metrics: [String: AnyObject]?) -> [NSLayoutConstraint] {
+
+        let views = [
+            "leftLabel": leftLabel,
+            "rightLabel": rightLabel
+        ]
+
+        var constraints = [NSLayoutConstraint]()
+
+        for (key, value) in formats {
+            constraints.appendContentsOf(NSLayoutConstraint.constraintsWithVisualFormat(key, options: value, metrics: metrics, views: views))
+        }
+
+        return constraints
+    }
+
+    func toggleActive(active: Bool, constraints: [NSLayoutConstraint]) {
+        _ = constraints.map { $0.active = active }
+    }
 
     func addProportionalCroppingConstriants() {
         // Remove exsiting constraints from the view's constriants array. Inactive constraints are deallocated unless a local reference to them is maintained.
@@ -98,28 +115,6 @@ class TableViewCell: UITableViewCell {
         }
 
         toggleActive(true, constraints: additionalHorizontalConstriants)
-    }
-
-    // MARK: Helper Methods
-
-    private func constraints(formats: [String: NSLayoutFormatOptions], metrics: [String: AnyObject]?) -> [NSLayoutConstraint] {
-
-        let views = [
-            "leftLabel": leftLabel,
-            "rightLabel": rightLabel
-        ]
-
-        var constraints = [NSLayoutConstraint]()
-
-        for (key, value) in formats {
-            constraints.appendContentsOf(NSLayoutConstraint.constraintsWithVisualFormat(key, options: value, metrics: metrics, views: views))
-        }
-
-        return constraints
-    }
-
-    func toggleActive(active: Bool, constraints: [NSLayoutConstraint]) {
-        _ = constraints.map { $0.active = active }
     }
 
     //MARK: Lazy Properties
