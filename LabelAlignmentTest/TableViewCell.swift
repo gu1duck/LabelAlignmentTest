@@ -12,10 +12,8 @@ class TableViewCell: UITableViewCell {
 
     static let defaultReuseIdentifier = "TableViewCellReuseIdentifier"
 
-    private var defaultHorizontalConstraints: [NSLayoutConstraint]!
-    private var additionalHorizontalConstriants = [NSLayoutConstraint]()
-
     private static let labelFont = UIFont(name: "Courier", size: 6.248983) // ~1% screen width for iPhone 6 in protrait
+    private static let defaultmarginSize: CGFloat = 8.0
 
     // MARK: Initialization
 
@@ -33,11 +31,25 @@ class TableViewCell: UITableViewCell {
         addSubview(leftLabel)
         addSubview(rightLabel)
 
-        let verticalConstraints = constraints(["V:|[leftLabel]|": []], metrics: nil)
-        toggleActive(true, constraints: verticalConstraints)
+        var layoutConstraints = constraints([
+            "V:|[leftLabel]|": [],
+            "H:|-[leftLabel]-[rightLabel]-|": [NSLayoutFormatOptions.AlignAllTop, NSLayoutFormatOptions.AlignAllBottom],
+            ], metrics: nil)
 
-        defaultHorizontalConstraints = constraints(["H:|[leftLabel][rightLabel]|": [NSLayoutFormatOptions.AlignAllTop, NSLayoutFormatOptions.AlignAllBottom]], metrics: nil)
-        toggleActive(true, constraints: defaultHorizontalConstraints)
+        let leftMultiplier: CGFloat = 2.0 / 3.0
+        let rightMultiplier: CGFloat = 1.0 / 3.0
+
+        let marginAdjustment: CGFloat = -(TableViewCell.defaultmarginSize * 3.0)
+
+        let leftLabelConstraint = leftLabel.widthAnchor.constraintGreaterThanOrEqualToAnchor(contentView.widthAnchor, multiplier: leftMultiplier, constant: marginAdjustment * leftMultiplier)
+        leftLabelConstraint.priority = UILayoutPriorityDefaultHigh
+
+        let rightLabelConstriant = rightLabel.widthAnchor.constraintGreaterThanOrEqualToAnchor(contentView.widthAnchor, multiplier: rightMultiplier, constant: marginAdjustment * rightMultiplier)
+        rightLabelConstriant.priority = UILayoutPriorityDefaultHigh
+
+        layoutConstraints.appendContentsOf([leftLabelConstraint, rightLabelConstriant])
+
+        toggleActive(true, constraints: layoutConstraints)
     }
 
     //MARK: Public Setup
@@ -56,15 +68,6 @@ class TableViewCell: UITableViewCell {
         rightLabel.text = stringFromInt(rightLabelCharacters)
 
         setNeedsUpdateConstraints()
-    }
-
-    // MARK: Default Overrides
-
-    override func updateConstraints() {
-        super.updateConstraints()
-        if leftLabel.text != nil || rightLabel.text != nil {
-            addProportionalCroppingConstriants()
-        }
     }
 
     // MARK: Helper Methods
@@ -89,34 +92,6 @@ class TableViewCell: UITableViewCell {
         _ = constraints.map { $0.active = active }
     }
 
-    func addProportionalCroppingConstriants() {
-        // Remove exsiting constraints from the view's constriants array. Inactive constraints are deallocated unless a local reference to them is maintained.
-        toggleActive(false, constraints: additionalHorizontalConstriants)
-
-        // Implicitly deallocates existing constraints
-        additionalHorizontalConstriants = [NSLayoutConstraint]()
-
-        let contentViewWidth = contentView.bounds.size.width
-        let leftStringWidth = leftLabel.intrinsicContentSize().width
-        let rightStringWidth = rightLabel.intrinsicContentSize().width
-
-        if (leftStringWidth >= (contentViewWidth * 2.0 / 3.0)) {
-            additionalHorizontalConstriants.append(leftLabel.widthAnchor.constraintGreaterThanOrEqualToAnchor(contentView.widthAnchor, multiplier: 2.0 / 3.0))
-            leftLabel.setContentCompressionResistancePriority(UILayoutPriorityDefaultLow, forAxis: .Horizontal)
-        } else {
-            leftLabel.setContentCompressionResistancePriority(UILayoutPriorityDefaultHigh, forAxis: .Horizontal)
-        }
-
-        if (rightStringWidth >= (contentViewWidth * 1.0 / 3.0)) {
-            additionalHorizontalConstriants.append(rightLabel.widthAnchor.constraintGreaterThanOrEqualToAnchor(contentView.widthAnchor, multiplier: 1.0 / 3.0))
-            rightLabel.setContentCompressionResistancePriority(UILayoutPriorityDefaultLow, forAxis: .Horizontal)
-        } else {
-            rightLabel.setContentCompressionResistancePriority(UILayoutPriorityDefaultHigh, forAxis: .Horizontal)
-        }
-
-        toggleActive(true, constraints: additionalHorizontalConstriants)
-    }
-
     //MARK: Lazy Properties
 
     private lazy var leftLabel: Label = {
@@ -124,6 +99,7 @@ class TableViewCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.backgroundColor = .yellowColor()
         label.font = TableViewCell.labelFont
+        label.setContentCompressionResistancePriority(UILayoutPriorityDefaultHigh, forAxis: .Horizontal)
 
         return label
     }()
@@ -133,6 +109,7 @@ class TableViewCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .Right
         label.font = TableViewCell.labelFont
+        label.setContentCompressionResistancePriority(UILayoutPriorityDefaultHigh, forAxis: .Horizontal)
 
         return label
     }()
